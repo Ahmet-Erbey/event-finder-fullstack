@@ -3,7 +3,7 @@ import { CalendarDays, MapPin, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { EventCard } from '../components/EventCard';
 import { EventFilters } from '../components/EventFilters';
-import { mockEvents } from '../data/mock-events';
+import { mockEvents } from '../queries/mock-events';
 import type { FilterState } from '../types';
 
 export default function EventsPage() {

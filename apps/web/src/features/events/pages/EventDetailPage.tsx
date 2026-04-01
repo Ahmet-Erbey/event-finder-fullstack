@@ -5,7 +5,7 @@ import { useNavigate, useParams } from '@tanstack/react-router';
 import { format, parseISO } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { ArrowLeft, CalendarDays, MapPin, Tag, Ticket } from 'lucide-react';
-import { mockEvents } from '../data/mock-events';
+import { mockEvents } from '../queries/mock-events';
 import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS } from '../types';
 
 export default function EventDetailPage() {
