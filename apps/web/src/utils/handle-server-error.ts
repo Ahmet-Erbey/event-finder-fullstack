@@ -1,4 +1,3 @@
-import { toast } from 'sonner';
 
 export function handleServerError(error: unknown) {
   // eslint-disable-next-line no-console
@@ -14,5 +13,7 @@ export function handleServerError(error: unknown) {
     errMsg = error.response?.data.title
   } */
 
-  toast.error(errMsg);
+  // TODO: Backend hazır olduğunda aşağıdaki satırı aç:
+  // toast.error(errMsg);
+  console.warn('[Mutation Error]', errMsg, error);
 }

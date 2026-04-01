@@ -2,7 +2,6 @@ import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-qu
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { toast } from 'sonner';
 // Generated Routes
 import { handleServerError } from '#/utils/handle-server-error';
 import { FontProvider } from './context/font-context';
@@ -34,9 +33,10 @@ const queryClient = new QueryClient({
     },
   },
   queryCache: new QueryCache({
-    onError: () => {
-      toast.error('Something went wrong!');
-      // Error handling is managed by route guards and API interceptors
+    onError: (error) => {
+      // TODO: Backend hazır olduğunda aşağıdaki satırı aç:
+      // toast.error('Something went wrong!');
+      console.warn('[QueryCache] API error (backend may be unavailable):', error);
     },
   }),
 });
