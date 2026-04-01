@@ -36,28 +36,32 @@ export function ProfileDropdown() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link to="/demo/settings">
-              Profile
+            <Link to="/profil">
+              Profilim
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/demo/settings">
-              Billing
+            <Link to="/profil/faturalama">
+              Faturalama
               <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/demo/settings">
-              Settings
+            <Link to="/profil/ayarlar">
+              Ayarlar
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/profil/yeni-ekip">
+              Yeni Ekip
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
-          Log out
+          Çıkış Yap
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

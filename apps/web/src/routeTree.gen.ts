@@ -21,7 +21,11 @@ import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
 import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
 import { Route as authOtpRouteImport } from './routes/(auth)/otp'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
+import { Route as AuthenticatedProfilIndexRouteImport } from './routes/_authenticated/profil/index'
 import { Route as AuthenticatedEventsIndexRouteImport } from './routes/_authenticated/events/index'
+import { Route as AuthenticatedProfilYeniEkipRouteImport } from './routes/_authenticated/profil/yeni-ekip'
+import { Route as AuthenticatedProfilFaturalamaRouteImport } from './routes/_authenticated/profil/faturalama'
+import { Route as AuthenticatedProfilAyarlarRouteImport } from './routes/_authenticated/profil/ayarlar'
 import { Route as AuthenticatedEventsEventIdRouteImport } from './routes/_authenticated/events/$eventId'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -82,10 +86,34 @@ const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => authRouteRoute,
 } as any)
+const AuthenticatedProfilIndexRoute =
+  AuthenticatedProfilIndexRouteImport.update({
+    id: '/profil/',
+    path: '/profil/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedEventsIndexRoute =
   AuthenticatedEventsIndexRouteImport.update({
     id: '/events/',
     path: '/events/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProfilYeniEkipRoute =
+  AuthenticatedProfilYeniEkipRouteImport.update({
+    id: '/profil/yeni-ekip',
+    path: '/profil/yeni-ekip',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProfilFaturalamaRoute =
+  AuthenticatedProfilFaturalamaRouteImport.update({
+    id: '/profil/faturalama',
+    path: '/profil/faturalama',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProfilAyarlarRoute =
+  AuthenticatedProfilAyarlarRouteImport.update({
+    id: '/profil/ayarlar',
+    path: '/profil/ayarlar',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedEventsEventIdRoute =
@@ -107,7 +135,11 @@ export interface FileRoutesByFullPath {
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
   '/events/$eventId': typeof AuthenticatedEventsEventIdRoute
+  '/profil/ayarlar': typeof AuthenticatedProfilAyarlarRoute
+  '/profil/faturalama': typeof AuthenticatedProfilFaturalamaRoute
+  '/profil/yeni-ekip': typeof AuthenticatedProfilYeniEkipRoute
   '/events': typeof AuthenticatedEventsIndexRoute
+  '/profil': typeof AuthenticatedProfilIndexRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof authForgotPasswordRoute
@@ -121,7 +153,11 @@ export interface FileRoutesByTo {
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
   '/events/$eventId': typeof AuthenticatedEventsEventIdRoute
+  '/profil/ayarlar': typeof AuthenticatedProfilAyarlarRoute
+  '/profil/faturalama': typeof AuthenticatedProfilFaturalamaRoute
+  '/profil/yeni-ekip': typeof AuthenticatedProfilYeniEkipRoute
   '/events': typeof AuthenticatedEventsIndexRoute
+  '/profil': typeof AuthenticatedProfilIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -138,7 +174,11 @@ export interface FileRoutesById {
   '/(errors)/503': typeof errors503Route
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/events/$eventId': typeof AuthenticatedEventsEventIdRoute
+  '/_authenticated/profil/ayarlar': typeof AuthenticatedProfilAyarlarRoute
+  '/_authenticated/profil/faturalama': typeof AuthenticatedProfilFaturalamaRoute
+  '/_authenticated/profil/yeni-ekip': typeof AuthenticatedProfilYeniEkipRoute
   '/_authenticated/events/': typeof AuthenticatedEventsIndexRoute
+  '/_authenticated/profil/': typeof AuthenticatedProfilIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -154,7 +194,11 @@ export interface FileRouteTypes {
     | '/503'
     | '/'
     | '/events/$eventId'
+    | '/profil/ayarlar'
+    | '/profil/faturalama'
+    | '/profil/yeni-ekip'
     | '/events'
+    | '/profil'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -168,7 +212,11 @@ export interface FileRouteTypes {
     | '/503'
     | '/'
     | '/events/$eventId'
+    | '/profil/ayarlar'
+    | '/profil/faturalama'
+    | '/profil/yeni-ekip'
     | '/events'
+    | '/profil'
   id:
     | '__root__'
     | '/(auth)'
@@ -184,7 +232,11 @@ export interface FileRouteTypes {
     | '/(errors)/503'
     | '/_authenticated/'
     | '/_authenticated/events/$eventId'
+    | '/_authenticated/profil/ayarlar'
+    | '/_authenticated/profil/faturalama'
+    | '/_authenticated/profil/yeni-ekip'
     | '/_authenticated/events/'
+    | '/_authenticated/profil/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -283,11 +335,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authForgotPasswordRouteImport
       parentRoute: typeof authRouteRoute
     }
+    '/_authenticated/profil/': {
+      id: '/_authenticated/profil/'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof AuthenticatedProfilIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/events/': {
       id: '/_authenticated/events/'
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof AuthenticatedEventsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profil/yeni-ekip': {
+      id: '/_authenticated/profil/yeni-ekip'
+      path: '/profil/yeni-ekip'
+      fullPath: '/profil/yeni-ekip'
+      preLoaderRoute: typeof AuthenticatedProfilYeniEkipRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profil/faturalama': {
+      id: '/_authenticated/profil/faturalama'
+      path: '/profil/faturalama'
+      fullPath: '/profil/faturalama'
+      preLoaderRoute: typeof AuthenticatedProfilFaturalamaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profil/ayarlar': {
+      id: '/_authenticated/profil/ayarlar'
+      path: '/profil/ayarlar'
+      fullPath: '/profil/ayarlar'
+      preLoaderRoute: typeof AuthenticatedProfilAyarlarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/events/$eventId': {
@@ -321,13 +401,21 @@ const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedEventsEventIdRoute: typeof AuthenticatedEventsEventIdRoute
+  AuthenticatedProfilAyarlarRoute: typeof AuthenticatedProfilAyarlarRoute
+  AuthenticatedProfilFaturalamaRoute: typeof AuthenticatedProfilFaturalamaRoute
+  AuthenticatedProfilYeniEkipRoute: typeof AuthenticatedProfilYeniEkipRoute
   AuthenticatedEventsIndexRoute: typeof AuthenticatedEventsIndexRoute
+  AuthenticatedProfilIndexRoute: typeof AuthenticatedProfilIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedEventsEventIdRoute: AuthenticatedEventsEventIdRoute,
+  AuthenticatedProfilAyarlarRoute: AuthenticatedProfilAyarlarRoute,
+  AuthenticatedProfilFaturalamaRoute: AuthenticatedProfilFaturalamaRoute,
+  AuthenticatedProfilYeniEkipRoute: AuthenticatedProfilYeniEkipRoute,
   AuthenticatedEventsIndexRoute: AuthenticatedEventsIndexRoute,
+  AuthenticatedProfilIndexRoute: AuthenticatedProfilIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
