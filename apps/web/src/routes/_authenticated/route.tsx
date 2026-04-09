@@ -30,30 +30,37 @@ export const Route = createFileRoute('/_authenticated')({
         queryFn: () => api.auth.me.get(),
       });
     } catch {
-      // API unavailable — use mock session for development
-      session = {
-        data: {
-          id: 'mock-user-1',
-          name: 'Demo Kullanıcı',
-          email: 'demo@eventfinder.com',
-          firstName: 'Demo',
-          lastName: 'Kullanıcı',
-          gender: 'MALE',
-          scope: 'COMPANY',
-          isActive: true,
-          emailVerified: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          organizationMemberships: [],
-          claims: { global: [], company: {} },
-          roles: [],
-        },
-        error: null,
-      } as any;
+      // API unavailable — use local auth session created from sign-up/sign-in flow
+      const localAuthUserRaw = typeof window !== 'undefined'
+        ? window.localStorage.getItem('event-finder:auth-user')
+        : null;
+      const localAuthUser = localAuthUserRaw ? JSON.parse(localAuthUserRaw) : null;
+
+      if (localAuthUser) {
+        session = {
+          data: {
+            id: localAuthUser.id ?? 'local-user-1',
+            name: localAuthUser.name ?? 'Event Finder User',
+            email: localAuthUser.email,
+            firstName: localAuthUser.firstName ?? 'Event',
+            lastName: localAuthUser.lastName ?? 'User',
+            gender: 'MALE',
+            scope: 'COMPANY',
+            isActive: true,
+            emailVerified: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            organizationMemberships: [],
+            claims: { global: [], company: {} },
+            roles: [],
+          },
+          error: null,
+        } as any;
+      }
     }
 
     if (!session?.data) {
-      throw redirect({ to: '/sign-in' });
+      throw redirect({ to: '/sign-up' });
     }
 
     const userData = session.data;

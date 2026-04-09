@@ -27,15 +27,18 @@ export function useNavUser(options: UseNavUserOptions = {}): UseNavUserResult {
   const { session } = useSession();
 
   async function handleLogout() {
-    const response = await authClient.signOut();
-    if (response.error) {
-      toast.error(response.error.message);
+    try {
+      const response = await authClient.signOut();
+      if (response.error) {
+        toast.error(response.error.message);
+      }
+    } catch {
+      // Backend olmayabilir; local akışta sessizce devam et
     }
 
-    if (response.data?.success) {
-      queryClient.removeQueries({ queryKey: ['session'] });
-      navigate({ to: '/sign-in', replace: true });
-    }
+    window.localStorage.removeItem('event-finder:auth-user');
+    queryClient.removeQueries({ queryKey: ['session'] });
+    navigate({ to: '/sign-up', replace: true });
   }
 
   const userName = session?.name || defaultName;

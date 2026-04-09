@@ -18,7 +18,7 @@ export function EventCard({ event }: EventCardProps) {
 
   return (
     <Card
-      className="group overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border-0 bg-card"
+      className="group cursor-pointer overflow-hidden border border-violet-200/40 bg-card/95 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-violet-900/30"
       onClick={() => navigate({ to: '/events/$eventId', params: { eventId: event.id } })}
     >
       {/* Image */}
@@ -53,7 +53,7 @@ export function EventCard({ event }: EventCardProps) {
       </div>
 
       {/* Content */}
-      <CardContent className="p-4 space-y-3">
+      <CardContent className="space-y-3 p-4">
         <h3 className="font-semibold text-base leading-tight line-clamp-2 group-hover:text-primary transition-colors">
           {event.title}
         </h3>

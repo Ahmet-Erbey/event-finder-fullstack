@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from '@tanstack/react-router';
 import { HTMLAttributes, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { PasswordInput } from '#/components/password-input';
 import { Button } from '#/components/ui/button';
@@ -13,67 +15,44 @@ import {
   FormMessage,
 } from '#/components/ui/form';
 import { Input } from '#/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '#/components/ui/select';
-import { TURKISH_CITIES } from '#/features/events/types';
 import { cn } from '#/lib/utils';
 
 type SignUpFormProps = HTMLAttributes<HTMLFormElement>;
+const LOCAL_REGISTERED_USER_KEY = 'event-finder:registered-user';
 
-const formSchema = z
-  .object({
-    username: z
-      .string()
-      .min(3, { message: 'Kullanıcı adı en az 3 karakter olmalıdır' })
-      .max(20, { message: 'Kullanıcı adı en fazla 20 karakter olabilir' })
-      .regex(/^[a-zA-Z0-9_]+$/, { message: 'Sadece harf, rakam ve _ kullanılabilir' }),
-    firstName: z.string().min(2, { message: 'Ad en az 2 karakter olmalıdır' }),
-    lastName: z.string().min(2, { message: 'Soyad en az 2 karakter olmalıdır' }),
-    city: z.string().min(1, { message: 'Lütfen bir şehir seçin' }),
-    email: z
-      .string()
-      .min(1, { message: 'E-posta adresinizi girin' })
-      .email({ message: 'Geçersiz e-posta adresi' }),
-    password: z
-      .string()
-      .min(1, { message: 'Şifrenizi girin' })
-      .min(7, { message: 'Şifre en az 7 karakter olmalıdır' }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Şifreler eşleşmiyor.',
-    path: ['confirmPassword'],
-  });
+const formSchema = z.object({
+  firstName: z.string().min(2, { message: 'Ad en az 2 karakter olmalıdır' }),
+  lastName: z.string().min(2, { message: 'Soyad en az 2 karakter olmalıdır' }),
+  email: z
+    .string()
+    .min(1, { message: 'E-posta adresinizi girin' })
+    .email({ message: 'Geçersiz e-posta adresi' }),
+  password: z
+    .string()
+    .min(1, { message: 'Şifrenizi girin' })
+    .min(8, { message: 'Şifre en az 8 karakter olmalıdır' }),
+});
 
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
       firstName: '',
       lastName: '',
-      city: '',
       email: '',
       password: '',
-      confirmPassword: '',
     },
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    // eslint-disable-next-line no-console
-    console.log(data);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    window.localStorage.setItem(LOCAL_REGISTERED_USER_KEY, JSON.stringify(data));
+    toast.success('Kayıt başarılı. Şimdi giriş yapabilirsin.');
+    setIsLoading(false);
+    navigate({ to: '/sign-in' });
   }
 
   return (
@@ -113,47 +92,6 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
           />
         </div>
 
-        {/* Kullanıcı adı */}
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Kullanıcı Adı</FormLabel>
-              <FormControl>
-                <Input placeholder="ayse_kaya" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Şehir */}
-        <FormField
-          control={form.control}
-          name="city"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Şehir</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Şehir seçin" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {TURKISH_CITIES.map((city) => (
-                    <SelectItem key={city} value={city}>
-                      {city}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         {/* Email */}
         <FormField
           control={form.control}
@@ -176,21 +114,6 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Şifre</FormLabel>
-              <FormControl>
-                <PasswordInput placeholder="••••••••" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Şifre tekrar */}
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Şifre Tekrar</FormLabel>
               <FormControl>
                 <PasswordInput placeholder="••••••••" {...field} />
               </FormControl>

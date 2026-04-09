@@ -27,11 +27,11 @@ export function EventFilters({ filters, onChange, totalCount, filteredCount }: E
   return (
     <div className="flex flex-wrap items-center gap-3">
       {/* Search */}
-      <div className="relative flex-none w-[220px]">
+      <div className="relative w-full flex-none sm:w-[220px]">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           placeholder="Etkinlik ara..."
-          className="pl-8 h-9 text-sm bg-background w-full"
+          className="h-9 w-full bg-background/90 pl-8 text-sm"
           value={filters.search}
           onChange={(e) => onChange({ ...filters, search: e.target.value })}
         />
@@ -42,7 +42,7 @@ export function EventFilters({ filters, onChange, totalCount, filteredCount }: E
         value={filters.city || 'all'}
         onValueChange={(v) => onChange({ ...filters, city: v === 'all' ? '' : v })}
       >
-        <SelectTrigger className="h-9 text-sm w-[150px] bg-background">
+        <SelectTrigger className="h-9 w-[150px] bg-background/90 text-sm">
           <SelectValue placeholder="Tüm şehirler" />
         </SelectTrigger>
         <SelectContent>
@@ -60,7 +60,7 @@ export function EventFilters({ filters, onChange, totalCount, filteredCount }: E
         value={filters.type || 'all'}
         onValueChange={(v) => onChange({ ...filters, type: v === 'all' ? '' : v })}
       >
-        <SelectTrigger className="h-9 text-sm w-[150px] bg-background">
+        <SelectTrigger className="h-9 w-[150px] bg-background/90 text-sm">
           <SelectValue placeholder="Tüm türler" />
         </SelectTrigger>
         <SelectContent>
@@ -81,7 +81,7 @@ export function EventFilters({ filters, onChange, totalCount, filteredCount }: E
         onBlur={(e) => {
           if (!e.target.value) e.target.type = 'text';
         }}
-        className="h-9 text-sm w-[160px] bg-background"
+        className="h-9 w-[160px] bg-background/90 text-sm"
         value={filters.date}
         onChange={(e) => onChange({ ...filters, date: e.target.value })}
       />
@@ -99,7 +99,7 @@ export function EventFilters({ filters, onChange, totalCount, filteredCount }: E
         </Button>
       )}
 
-      <span className="text-xs text-muted-foreground ml-auto whitespace-nowrap">
+      <span className="ml-auto whitespace-nowrap text-xs text-muted-foreground">
         {filteredCount === totalCount
           ? `${totalCount} etkinlik`
           : `${filteredCount} / ${totalCount}`}

@@ -1,6 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { NewTeamPage } from '#/features/profile';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authenticated/profil/yeni-ekip')({
-  component: NewTeamPage,
+  beforeLoad: () => {
+    throw redirect({ to: '/profil' });
+  },
+  component: () => null,
 });

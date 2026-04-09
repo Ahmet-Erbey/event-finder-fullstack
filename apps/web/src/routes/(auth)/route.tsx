@@ -5,12 +5,21 @@ import { api } from '#lib/api.ts';
 export const Route = createFileRoute('/(auth)')({
   beforeLoad: async ({ context }) => {
     const { queryClient } = context;
-    const session = await queryClient.ensureQueryData({
-      queryKey: ['session'],
-      queryFn: () => api.auth.me.get(),
-    });
-    if (session.data) {
-      throw redirect({ to: '/' });
+    try {
+      const session = await queryClient.ensureQueryData({
+        queryKey: ['session'],
+        queryFn: () => api.auth.me.get(),
+      });
+      if (session.data) {
+        throw redirect({ to: '/' });
+      }
+    } catch {
+      const localAuthUser = typeof window !== 'undefined'
+        ? window.localStorage.getItem('event-finder:auth-user')
+        : null;
+      if (localAuthUser) {
+        throw redirect({ to: '/' });
+      }
     }
   },
   component: () => {

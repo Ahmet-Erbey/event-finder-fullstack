@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { UserAuthForm } from '#components/form/user-auth-form.tsx';
 import {
   Card,
@@ -15,28 +15,31 @@ export const Route = createFileRoute('/(auth)/sign-in')({
 
 function SignIn() {
   return (
-    <Card className="gap-4">
+    <Card className="gap-4 border-0 bg-transparent shadow-none">
       <CardHeader>
-        <CardTitle className="text-lg tracking-tight">Login</CardTitle>
+        <CardTitle className="text-lg tracking-tight">Giriş Yap</CardTitle>
         <CardDescription>
-          Enter your email and password below to <br />
-          log into your account
+          E-posta ve şifren ile hesabına giriş yap. <br />
+          Hesabın yok mu?{' '}
+          <Link to="/sign-up" className="hover:text-primary underline underline-offset-4">
+            Kayıt Ol
+          </Link>
         </CardDescription>
       </CardHeader>
       <CardContent>
         <UserAuthForm />
       </CardContent>
       <CardFooter>
-        <p className="text-muted-foreground px-8 text-center text-sm">
-          By clicking login, you agree to our{' '}
+        <p className="text-muted-foreground px-4 text-center text-sm">
+          Giriş yap butonuna basarak{' '}
           <a href="/terms" className="hover:text-primary underline underline-offset-4">
-            Terms of Service
+            Kullanım Şartları
           </a>{' '}
-          and{' '}
+          ve{' '}
           <a href="/privacy" className="hover:text-primary underline underline-offset-4">
-            Privacy Policy
+            Gizlilik Politikası
           </a>
-          .
+          'nı kabul etmiş olursun.
         </p>
       </CardFooter>
     </Card>

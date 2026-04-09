@@ -16,7 +16,7 @@ export default function EventDetailPage() {
   if (!event) {
     return (
       <PageContainer>
-        <div className="flex flex-col items-center justify-center py-32 text-center">
+        <div className="mx-auto flex max-w-3xl flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-card/60 py-32 text-center">
           <h2 className="text-2xl font-bold mb-2">Etkinlik bulunamadı</h2>
           <p className="text-muted-foreground mb-6">Bu etkinlik mevcut değil veya kaldırılmış olabilir.</p>
           <Button onClick={() => navigate({ to: '/events' })}>
@@ -32,7 +32,10 @@ export default function EventDetailPage() {
 
   return (
     <PageContainer>
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-violet-200/40 bg-gradient-to-br from-violet-50/70 via-background to-indigo-50/70 p-4 shadow-sm sm:p-6 dark:border-violet-900/30 dark:from-violet-950/20 dark:to-indigo-950/20">
+        <div className="pointer-events-none absolute -top-24 -right-24 h-48 w-48 rounded-full bg-violet-200/35 blur-3xl dark:bg-violet-700/20" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-48 w-48 rounded-full bg-indigo-200/30 blur-3xl dark:bg-indigo-700/20" />
+        <div className="relative space-y-6">
         {/* Back button */}
         <Button
           variant="ghost"
@@ -46,7 +49,7 @@ export default function EventDetailPage() {
 
         {/* Hero image */}
         {event.imageUrl && (
-          <div className="relative h-72 md:h-96 rounded-2xl overflow-hidden shadow-lg">
+          <div className="relative h-72 overflow-hidden rounded-2xl shadow-lg md:h-96">
             <img
               src={event.imageUrl}
               alt={event.title}
@@ -69,7 +72,7 @@ export default function EventDetailPage() {
         )}
 
         {/* Title & meta */}
-        <div className="space-y-4">
+        <div className="space-y-4 rounded-2xl border border-indigo-200/40 bg-card/90 p-5 shadow-sm dark:border-indigo-900/30">
           <h1 className="text-2xl md:text-3xl font-bold leading-tight">{event.title}</h1>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -94,14 +97,14 @@ export default function EventDetailPage() {
         </div>
 
         {/* Description */}
-        <div className="prose prose-sm dark:prose-invert max-w-none">
+        <div className="prose prose-sm max-w-none rounded-2xl border border-violet-200/40 bg-card/90 p-5 shadow-sm dark:prose-invert dark:border-violet-900/30">
           <h2 className="text-base font-semibold mb-2">Etkinlik Hakkında</h2>
           <p className="text-muted-foreground leading-relaxed">{event.description}</p>
         </div>
 
         {/* Tags */}
         {event.tags && event.tags.length > 0 && (
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-border/50 bg-card/70 p-4">
             <Tag className="w-4 h-4 text-muted-foreground" />
             {event.tags.map((tag) => (
               <Badge key={tag} variant="secondary" className="text-xs">
@@ -123,6 +126,7 @@ export default function EventDetailPage() {
             <Ticket className="w-4 h-4" />
             {event.isFree ? 'Ücretsiz Kayıt Ol' : 'Bilet Al'}
           </Button>
+        </div>
         </div>
       </div>
     </PageContainer>
