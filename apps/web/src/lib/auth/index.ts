@@ -26,5 +26,7 @@
 // Re-export auth client
 export { authClient } from './client';
 
+export { signInWithEmail, signUpWithEmail } from './fetch-auth';
+
 // Re-export all permission utilities
 export * from './permissions';

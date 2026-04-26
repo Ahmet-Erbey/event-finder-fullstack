@@ -1,4 +1,6 @@
+import { RequireAuth } from '#/components/auth';
 import { AuthenticatedLayout } from '#/components/layout/authenticated-layout';
+import { SESSION_QUERY_KEY } from '#/context/auth-context';
 import { CompanyContextProvider } from '#/context/company-context';
 import { api } from '#lib/api.ts';
 import { hasPermission } from '#lib/auth';
@@ -21,46 +23,16 @@ export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ context }) => {
     const { queryClient } = context;
 
-    // Fetch session data — fallback to mock session when API is unavailable
-    // This allows the app to work without a backend in development
-    let session: Awaited<ReturnType<typeof api.auth.me.get>> | null = null;
-    try {
-      session = await queryClient.ensureQueryData({
-        queryKey: ['session'],
+    const session: Awaited<ReturnType<typeof api.auth.me.get>> | null = await queryClient
+      .fetchQuery({
+        queryKey: [...SESSION_QUERY_KEY],
         queryFn: () => api.auth.me.get(),
-      });
-    } catch {
-      // API unavailable — use local auth session created from sign-up/sign-in flow
-      const localAuthUserRaw = typeof window !== 'undefined'
-        ? window.localStorage.getItem('event-finder:auth-user')
-        : null;
-      const localAuthUser = localAuthUserRaw ? JSON.parse(localAuthUserRaw) : null;
-
-      if (localAuthUser) {
-        session = {
-          data: {
-            id: localAuthUser.id ?? 'local-user-1',
-            name: localAuthUser.name ?? 'Event Finder User',
-            email: localAuthUser.email,
-            firstName: localAuthUser.firstName ?? 'Event',
-            lastName: localAuthUser.lastName ?? 'User',
-            gender: 'MALE',
-            scope: 'COMPANY',
-            isActive: true,
-            emailVerified: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            organizationMemberships: [],
-            claims: { global: [], company: {} },
-            roles: [],
-          },
-          error: null,
-        } as any;
-      }
-    }
+        retry: false,
+      })
+      .catch(() => null);
 
     if (!session?.data) {
-      throw redirect({ to: '/sign-up' });
+      throw redirect({ to: '/sign-in' });
     }
 
     const userData = session.data;
@@ -189,8 +161,10 @@ export const Route = createFileRoute('/_authenticated')({
     };
   },
   component: () => (
-    <CompanyContextProvider>
-      <AuthenticatedLayout />
-    </CompanyContextProvider>
+    <RequireAuth>
+      <CompanyContextProvider>
+        <AuthenticatedLayout />
+      </CompanyContextProvider>
+    </RequireAuth>
   ),
 });

@@ -5,6 +5,9 @@
   "config": {
     "envFile": "../../config/apps/api/.env"
   },
+  "prisma": {
+    "seed": "dotenvx run --quiet -f ../../config/apps/api/.env -- bun ../../apps/api/prisma/seed.ts"
+  },
   "scripts": {
     "prisma": "prisma --",
     "format": "prisma-case-format --file ./prisma/schema.prisma --table-case pascal --field-case camel --enum-case pascal --map-table-case snake,plural --map-field-case snake --map-enum-case snake --pluralize",

@@ -7,12 +7,14 @@ import { systemAdministrationController } from './system-administration';
 import { usersController } from './users';
 import { companiesController } from './companies';
 import projectsController from './projects';
+import { eventsController } from './events';
 
 const app = new Elysia()
   .use(systemAdministrationController)
   .use(usersController)
   .use(authController)
   .use(postsController)
+  .use(eventsController)
   .use(projectsController)
   .use(locationsController)
   .use(companiesController)
@@ -39,6 +41,7 @@ export const swaggerTags: { name: string; description: string }[] = [
   { name: 'Auth', description: 'Auth endpoints' },
   { name: 'Role', description: 'Role endpoints' },
   { name: 'Post', description: 'Post endpoints' },
+  { name: 'Events', description: 'Etkinlik listesi ve yönetimi (okuma herkese açık, yazma yönetici)' },
   { name: 'Projects', description: 'Project management endpoints - demonstrates different permission levels (System Admin, Company Admin, Company Member)' },
   { name: 'Country', description: 'Country endpoints' },
   { name: 'State', description: 'State endpoints' },

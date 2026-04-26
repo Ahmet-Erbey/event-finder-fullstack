@@ -23,6 +23,7 @@ import { Route as authOtpRouteImport } from './routes/(auth)/otp'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as AuthenticatedProfilIndexRouteImport } from './routes/_authenticated/profil/index'
 import { Route as AuthenticatedEventsIndexRouteImport } from './routes/_authenticated/events/index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedProfilYeniEkipRouteImport } from './routes/_authenticated/profil/yeni-ekip'
 import { Route as AuthenticatedProfilFaturalamaRouteImport } from './routes/_authenticated/profil/faturalama'
 import { Route as AuthenticatedProfilAyarlarRouteImport } from './routes/_authenticated/profil/ayarlar'
@@ -98,6 +99,11 @@ const AuthenticatedEventsIndexRoute =
     path: '/events/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProfilYeniEkipRoute =
   AuthenticatedProfilYeniEkipRouteImport.update({
     id: '/profil/yeni-ekip',
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/profil/ayarlar': typeof AuthenticatedProfilAyarlarRoute
   '/profil/faturalama': typeof AuthenticatedProfilFaturalamaRoute
   '/profil/yeni-ekip': typeof AuthenticatedProfilYeniEkipRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/events': typeof AuthenticatedEventsIndexRoute
   '/profil': typeof AuthenticatedProfilIndexRoute
 }
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/profil/ayarlar': typeof AuthenticatedProfilAyarlarRoute
   '/profil/faturalama': typeof AuthenticatedProfilFaturalamaRoute
   '/profil/yeni-ekip': typeof AuthenticatedProfilYeniEkipRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/events': typeof AuthenticatedEventsIndexRoute
   '/profil': typeof AuthenticatedProfilIndexRoute
 }
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/_authenticated/profil/ayarlar': typeof AuthenticatedProfilAyarlarRoute
   '/_authenticated/profil/faturalama': typeof AuthenticatedProfilFaturalamaRoute
   '/_authenticated/profil/yeni-ekip': typeof AuthenticatedProfilYeniEkipRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/events/': typeof AuthenticatedEventsIndexRoute
   '/_authenticated/profil/': typeof AuthenticatedProfilIndexRoute
 }
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/profil/ayarlar'
     | '/profil/faturalama'
     | '/profil/yeni-ekip'
+    | '/admin'
     | '/events'
     | '/profil'
   fileRoutesByTo: FileRoutesByTo
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '/profil/ayarlar'
     | '/profil/faturalama'
     | '/profil/yeni-ekip'
+    | '/admin'
     | '/events'
     | '/profil'
   id:
@@ -235,6 +246,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profil/ayarlar'
     | '/_authenticated/profil/faturalama'
     | '/_authenticated/profil/yeni-ekip'
+    | '/_authenticated/admin/'
     | '/_authenticated/events/'
     | '/_authenticated/profil/'
   fileRoutesById: FileRoutesById
@@ -349,6 +361,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEventsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profil/yeni-ekip': {
       id: '/_authenticated/profil/yeni-ekip'
       path: '/profil/yeni-ekip'
@@ -404,6 +423,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedProfilAyarlarRoute: typeof AuthenticatedProfilAyarlarRoute
   AuthenticatedProfilFaturalamaRoute: typeof AuthenticatedProfilFaturalamaRoute
   AuthenticatedProfilYeniEkipRoute: typeof AuthenticatedProfilYeniEkipRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedEventsIndexRoute: typeof AuthenticatedEventsIndexRoute
   AuthenticatedProfilIndexRoute: typeof AuthenticatedProfilIndexRoute
 }
@@ -414,6 +434,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProfilAyarlarRoute: AuthenticatedProfilAyarlarRoute,
   AuthenticatedProfilFaturalamaRoute: AuthenticatedProfilFaturalamaRoute,
   AuthenticatedProfilYeniEkipRoute: AuthenticatedProfilYeniEkipRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedEventsIndexRoute: AuthenticatedEventsIndexRoute,
   AuthenticatedProfilIndexRoute: AuthenticatedProfilIndexRoute,
 }

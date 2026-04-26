@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from '@tanstack/react-router';
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -15,10 +15,12 @@ import {
   FormMessage,
 } from '#/components/ui/form';
 import { Input } from '#/components/ui/input';
+import { SESSION_QUERY_KEY } from '#/context/auth-context';
+import { signUpWithEmail } from '#/lib/auth';
+import { useQueryClient } from '@tanstack/react-query';
 import { cn } from '#/lib/utils';
 
 type SignUpFormProps = HTMLAttributes<HTMLFormElement>;
-const LOCAL_REGISTERED_USER_KEY = 'event-finder:registered-user';
 
 const formSchema = z.object({
   firstName: z.string().min(2, { message: 'Ad en az 2 karakter olmalıdır' }),
@@ -35,7 +37,7 @@ const formSchema = z.object({
 
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,12 +49,21 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    window.localStorage.setItem(LOCAL_REGISTERED_USER_KEY, JSON.stringify(data));
-    toast.success('Kayıt başarılı. Şimdi giriş yapabilirsin.');
-    setIsLoading(false);
-    navigate({ to: '/sign-in' });
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    try {
+      await signUpWithEmail({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+      });
+      await queryClient.invalidateQueries({ queryKey: [...SESSION_QUERY_KEY] });
+      toast.success('Hesabın oluşturuldu. Hoş geldin!');
+      navigate({ to: '/' });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Kayıt başarısız';
+      toast.error(message);
+    }
   }
 
   return (
@@ -122,8 +133,12 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
           )}
         />
 
-        <Button className="mt-2" disabled={isLoading}>
-          {isLoading ? 'Hesap oluşturuluyor...' : 'Hesap Oluştur'}
+        <Button
+          className="mt-2"
+          type="submit"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? 'Hesap oluşturuluyor...' : 'Hesap Oluştur'}
         </Button>
       </form>
     </Form>

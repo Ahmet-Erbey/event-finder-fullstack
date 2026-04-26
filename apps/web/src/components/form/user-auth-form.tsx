@@ -16,12 +16,12 @@ import {
 } from "#/components/ui/form";
 import { Input } from "#/components/ui/input";
 import { cn } from "#/lib/utils";
-import { authClient } from "#lib/auth";
+import { SESSION_QUERY_KEY } from '#/context/auth-context';
+import { signInWithEmail } from "#lib/auth";
+import { useQueryClient } from "@tanstack/react-query";
 import { typeboxResolver } from "#lib/resolver.ts";
 
 type UserAuthFormProps = HTMLAttributes<HTMLFormElement>;
-const LOCAL_REGISTERED_USER_KEY = 'event-finder:registered-user';
-const LOCAL_AUTH_USER_KEY = 'event-finder:auth-user';
 
 const formSchema = t.Object({
     email: t.String({
@@ -36,6 +36,7 @@ type FormSchema = Static<typeof formSchema>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const form = useForm<FormSchema>({
         resolver: typeboxResolver(formSchema),
         defaultValues: {
@@ -46,43 +47,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     async function onSubmit(data: FormSchema) {
         try {
-            const response = await authClient.signIn.email({
+            await signInWithEmail({
                 email: data.email,
                 password: data.password,
-                callbackURL: "/",
             });
-
-            if (response.error) {
-                throw new Error(response.error.message);
-            }
-
-            if (response.data) {
-                toast.success("Giriş başarılı");
-                navigate({ to: '/' });
-                return;
-            }
-        } catch {
-            const rawUser = window.localStorage.getItem(LOCAL_REGISTERED_USER_KEY);
-            const registeredUser = rawUser ? JSON.parse(rawUser) : null;
-            const isValidLocalUser =
-                registeredUser?.email === data.email &&
-                registeredUser?.password === data.password;
-
-            if (!isValidLocalUser) {
-                toast.error("E-posta veya şifre hatalı");
-                return;
-            }
-
-            const authUser = {
-                id: 'local-user-1',
-                name: `${registeredUser.firstName} ${registeredUser.lastName}`.trim(),
-                email: registeredUser.email,
-                firstName: registeredUser.firstName,
-                lastName: registeredUser.lastName,
-            };
-            window.localStorage.setItem(LOCAL_AUTH_USER_KEY, JSON.stringify(authUser));
+            await queryClient.invalidateQueries({ queryKey: [...SESSION_QUERY_KEY] });
             toast.success("Giriş başarılı");
-            navigate({ to: '/' });
+            navigate({ to: "/" });
+        } catch (e) {
+            const message = e instanceof Error ? e.message : "Giriş başarısız";
+            toast.error(message);
         }
     }
 
@@ -131,7 +105,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                         </FormItem>
                     )}
                 />
-                <Button className="mt-2" disabled={form.formState.isSubmitting}>
+                <Button type="submit" className="mt-2" disabled={form.formState.isSubmitting}>
                     Login
                 </Button>
 

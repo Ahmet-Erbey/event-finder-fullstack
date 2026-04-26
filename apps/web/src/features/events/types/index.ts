@@ -32,12 +32,12 @@ export interface Event {
   title: string;
   type: EventType;
   city: string;
-  date: string; // ISO date string
-  time: string; // e.g. "20:00"
-  venue: string;
-  description: string;
+  date: string; // ISO date string (YYYY-MM-DD)
+  time?: string;
+  venue?: string;
+  description?: string;
   imageUrl?: string;
-  price?: number;
+  price?: number | null;
   isFree?: boolean;
   tags?: string[];
 }

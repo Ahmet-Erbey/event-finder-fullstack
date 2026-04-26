@@ -9,6 +9,6 @@
     },
     "outDir": "../../dist/apps/api"
   },
-  "include": ["src/**/*.ts", "package.json"],
+  "include": ["src/**/*.ts", "prisma/**/*.ts", "package.json"],
   "references": [{ "path": "../../packages/database" }]
 }

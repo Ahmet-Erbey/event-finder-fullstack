@@ -5,6 +5,7 @@
     "envFile": "../../config/apps/api/.env"
   },
   "scripts": {
+    "db:seed": "dotenvx run --quiet -f ../../config/apps/api/.env -- prisma db seed --schema ../../packages/database/schema.prisma",
     "build": "dotenvx run --quiet -f ../../config/apps/api/.env -- bun ./src/core/build.ts",
     "build:low-mem": "cross-env BUILD_LOW_MEMORY=true dotenvx run --quiet -f ../../config/apps/api/.env -- bun --smol ./src/core/build.ts",
     "emails:preview": "email dev --dir src/emails --port 3333",
@@ -13,6 +14,9 @@
     "serve": "dotenvx run --quiet -f ../../config/apps/api/.env -- bun run dev",
     "start": "dotenvx run --quiet -f ../../config/apps/api/.env -- bun ../../dist/apps/api/index.js",
     "prisma": "cd ../../packages/database && bun run prisma"
+  },
+  "prisma": {
+    "seed": "bun prisma/seed.ts"
   },
   "type": "module",
   "dependencies": {
@@ -34,6 +38,8 @@
     "unpdf": "^1.4.0"
   },
   "devDependencies": {
+    "@types/node": "^22.10.1",
+    "prisma": "^6.15.0",
     "@types/http-errors": "^2.0.5",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",

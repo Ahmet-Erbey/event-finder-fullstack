@@ -297,6 +297,30 @@ export const PERMISSIONS = {
   },
 
   // ====================================================================
+  // 🎫 EVENTS (okuma herkese açık; yazma sadece GLOBAL izin = sistem yöneticisi)
+  // — withPermission org UUID almadığı için yalnızca claims.global kontrol edilir.
+  // — Şirket (COMPANY) kapsamlı rollerde bu anahtarlar atanamaz (scopes sadece GLOBAL).
+  // — Varsayılan System Owner (global ADMIN, '*') bu işlemlere erişir.
+  // ====================================================================
+  EVENTS: {
+    CREATE: {
+      key: 'events:create',
+      description: 'Etkinlik Oluştur (sistem yöneticisi — global izin)',
+      scopes: [GLOBAL],
+    },
+    UPDATE: {
+      key: 'events:update',
+      description: 'Etkinlik Güncelle (sistem yöneticisi — global izin)',
+      scopes: [GLOBAL],
+    },
+    DESTROY: {
+      key: 'events:destroy',
+      description: 'Etkinlik Sil (sistem yöneticisi — global izin)',
+      scopes: [GLOBAL],
+    },
+  },
+
+  // ====================================================================
   // 📋 PROJECT MANAGEMENT (Example CRUD with permission-based authorization)
   // ====================================================================
   PROJECTS: {
@@ -489,6 +513,12 @@ export const PERMISSION_GROUPS = {
     key: 'posts',
     description: 'Gönderiler',
     permissions: Object.values(PERMISSIONS.POSTS),
+  },
+
+  EVENTS: {
+    key: 'events',
+    description: 'Etkinlikler',
+    permissions: Object.values(PERMISSIONS.EVENTS),
   },
 
   // ====================================================================

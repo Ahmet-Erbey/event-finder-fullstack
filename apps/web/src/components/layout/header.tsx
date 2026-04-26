@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from '@tanstack/react-router';
 import { CalendarDays } from 'lucide-react';
 import { ProfileDropdown } from '#/components/profile-dropdown';
+import { canAccessAdminPanel } from '#/features/admin/permission';
+import { useSession } from '#/hooks/use-session';
 import { cn } from '#/lib/utils';
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
@@ -10,6 +12,8 @@ interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export const Header = ({ className, fixed, children, ...props }: HeaderProps) => {
+  const { session } = useSession();
+  const showAdmin = canAccessAdminPanel(session);
   const [offset, setOffset] = React.useState(0);
 
   React.useEffect(() => {
@@ -57,6 +61,15 @@ export const Header = ({ className, fixed, children, ...props }: HeaderProps) =>
         >
           Tüm Etkinlikler
         </Link>
+        {showAdmin && (
+          <Link
+            to="/admin"
+            className="rounded-md px-3 py-1.5 text-foreground transition-colors hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-violet-400"
+            activeProps={{ className: 'bg-violet-500/15 text-violet-600 dark:text-violet-300' }}
+          >
+            Yönetim
+          </Link>
+        )}
       </div>
 
       {/* Right side - User profile */}

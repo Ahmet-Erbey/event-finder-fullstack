@@ -2,9 +2,9 @@ import { Badge } from '#/components/ui/badge';
 import { Button } from '#/components/ui/button';
 import { Card, CardContent } from '#/components/ui/card';
 import { useNavigate } from '@tanstack/react-router';
-import { format, parseISO } from 'date-fns';
-import { tr } from 'date-fns/locale';
 import { CalendarDays, MapPin, Ticket } from 'lucide-react';
+import { tr } from 'date-fns/locale';
+import { formatEventFieldDate } from '../utils/event-date';
 import { EVENT_TYPE_COLORS, EVENT_TYPE_LABELS, type Event } from '../types';
 
 interface EventCardProps {
@@ -14,7 +14,7 @@ interface EventCardProps {
 export function EventCard({ event }: EventCardProps) {
   const navigate = useNavigate();
 
-  const formattedDate = format(parseISO(event.date), 'd MMMM yyyy', { locale: tr });
+  const formattedDate = formatEventFieldDate(event.date, 'd MMMM yyyy', { locale: tr });
 
   return (
     <Card
@@ -61,17 +61,24 @@ export function EventCard({ event }: EventCardProps) {
         <div className="space-y-1.5 text-sm text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <CalendarDays className="w-3.5 h-3.5 flex-shrink-0" />
-            <span>{formattedDate} — {event.time}</span>
+            <span>
+              {formattedDate}
+              {event.time ? ` — ${event.time}` : ''}
+            </span>
           </div>
           <div className="flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-            <span className="truncate">{event.venue}, {event.city}</span>
+            <span className="truncate">
+              {[event.venue, event.city].filter(Boolean).join(', ')}
+            </span>
           </div>
         </div>
 
-        <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-          {event.description}
-        </p>
+        {event.description ? (
+          <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+            {event.description}
+          </p>
+        ) : null}
 
         <Button
           size="sm"

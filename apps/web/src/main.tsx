@@ -3,6 +3,7 @@ import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 // Generated Routes
+import { AuthProvider } from '#/context/auth-context';
 import { handleServerError } from '#/utils/handle-server-error';
 import { FontProvider } from './context/font-context';
 import { ThemeProvider } from './context/theme-context';
@@ -65,11 +66,13 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-          <FontProvider>
-            <RouterProvider router={router} />
-          </FontProvider>
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+            <FontProvider>
+              <RouterProvider router={router} />
+            </FontProvider>
+          </ThemeProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </StrictMode>,
   );

@@ -694,3 +694,39 @@ model Project {
   @@index([deletedAt])
   @@map("projects")
 }
+
+// Event - etkinlik listesi / detay (auth ve user modellerinden bağımsız)
+enum EventType {
+  CONCERT
+  FESTIVAL
+  THEATER
+  SPORTS
+  EXHIBITION
+  COMEDY
+
+  @@map("event_type")
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String    @db.VarChar(512)
+  description String    @db.Text
+  type        EventType
+  city        String    @db.VarChar(128)
+  venue       String    @db.VarChar(512)
+  /// Etkinlik tarihi (saat bilgisi `time` alanında tutulur)
+  date        DateTime  @map("event_date")
+  time        String    @db.VarChar(16)
+  imageUrl    String    @map("image_url") @db.VarChar(2048)
+  /// Ücretsiz etkinliklerde genelde null; uygulama katmanında isFree ile tutarlılık sağlanır
+  price       Int?
+  isFree      Boolean   @default(false) @map("is_free")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([city])
+  @@index([type])
+  @@index([date])
+  @@map("events")
+}

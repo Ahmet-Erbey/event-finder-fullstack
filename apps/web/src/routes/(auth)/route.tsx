@@ -1,25 +1,20 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import AuthLayout from '#components/layout/auth-layout.tsx';
+import { SESSION_QUERY_KEY } from '#/context/auth-context';
 import { api } from '#lib/api.ts';
 
 export const Route = createFileRoute('/(auth)')({
   beforeLoad: async ({ context }) => {
     const { queryClient } = context;
-    try {
-      const session = await queryClient.ensureQueryData({
-        queryKey: ['session'],
+    const session = await queryClient
+      .fetchQuery({
+        queryKey: [...SESSION_QUERY_KEY],
         queryFn: () => api.auth.me.get(),
-      });
-      if (session.data) {
-        throw redirect({ to: '/' });
-      }
-    } catch {
-      const localAuthUser = typeof window !== 'undefined'
-        ? window.localStorage.getItem('event-finder:auth-user')
-        : null;
-      if (localAuthUser) {
-        throw redirect({ to: '/' });
-      }
+        retry: false,
+      })
+      .catch(() => null);
+    if (session?.data) {
+      throw redirect({ to: '/' });
     }
   },
   component: () => {
