@@ -17,7 +17,7 @@ Frontend (React)
         │
  REST API (Axios)
         │
-Backend (Node.js + Express)
+Backend (Node.js + ElysiaJS)
         │
 PostgreSQL + Prisma ORM
 ```
@@ -38,7 +38,7 @@ PostgreSQL + Prisma ORM
 ## Backend
 
 - Node.js
-- Express.js
+- Elysia.js
 - PostgreSQL
 - Prisma ORM
 - JWT Authentication
