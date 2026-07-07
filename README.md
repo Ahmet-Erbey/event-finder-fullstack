@@ -1,101 +1,252 @@
-# 🚀 Proje Başlangıç Rehberi
+# # 🎉 Event Finder (Full Stack)
 
-Bu rehber, hiç kodlama veya proje kurulumu tecrübesi olmayan kişiler için en basit ve anlaşılır haliyle hazırlanmıştır. Lütfen adımları sırayla, atlamadan takip edin.
+## 📌 Proje Hakkında
 
----
+Event Finder, kullanıcıların etkinlikleri kolayca keşfetmesini sağlayan modern bir Full Stack web uygulamasıdır.
 
-## 🔧 1. Olmazsa Olmaz Programlar (Ön Gereksinimler)
+Uygulama frontend ve backend olmak üzere iki bölümden oluşmaktadır. Kullanıcılar sisteme giriş yaptıktan sonra şehirlerine uygun etkinlikleri görüntüleyebilir, etkinlikleri kategoriye göre filtreleyebilir, tarihe göre sıralayabilir ve profil bilgilerini yönetebilir.
 
-Projeyi bilgisayarınızda çalıştırabilmeniz için ilk olarak şu programları kurmanız gerekiyor:
-
-1. **Bun (Çalıştırma Ortamı)**: Projemizin kalbidir.
-   - **Mac/Linux kullanıyorsanız** terminali açıp şunu yapıştırın:
-     `curl -fsSL https://bun.sh/install | bash`
-   - **Windows kullanıyorsanız** PowerShell'i yönetici olarak açıp şunu yapıştırın:
-     `powershell -c "irm bun.sh/install.ps1 | iex"`
-   
-2. **PostgreSQL (Veritabanı)**: Verilerin kaydedileceği yer.
-   - Bilgisayarınıza [PostgreSQL](https://www.postgresql.org/download/) indirip kurun ("İleri, İleri" diyerek kurabilirsiniz).
-   - Kurulum sırasında sizden bir şifre isteyecektir. Bu şifreyi **`postgres`** olarak ayarlarsanız kurulumda hiçbir dosya değiştirmenize gerek kalmaz.
-
-3. **Git**: Kod klasörünü bilgisayara indirebilmek için.
-   - [git-scm.com](https://git-scm.com) adresinden indirip kolayca kurabilirsiniz.
-
-4. **VS Code**: Kodlara bakmak için kullanacağımız editör. (Önerilen)
+Proje, gerçek ekip çalışması deneyimini simüle edecek şekilde REST API mimarisi kullanılarak geliştirilmiştir.
 
 ---
 
-## 📦 2. Adım Adım Kurulum
+# 🏗️ Proje Mimarisi
 
-### Adım 1: Projeyi Bilgisayarınıza İndirin
-cd <projenin-klasor-ismi>
-
-### Adım 2: Gerekli Paketleri Yükleyin
-Projemizin çalışması için internetteki bazı paketlere ihtiyacı var. Bunları tek bir komutla çekiyoruz:
-```bash
-bun install
 ```
-*(Bu işlem internet hızınıza bağlı olarak 1-2 dakika sürebilir, bitmesini bekleyin.)*
-
-### Adım 3: Ayar Dosyalarını Hazırlayın
-Projeyi, kendi bilgisayarımızda çalışacak şekilde yapılandırmamız lazım. Terminale sırasıyla bunları yapıştırın:
-```bash
-cp config/apps/api/.env.example config/apps/api/.env
-cp config/apps/web/.env.example config/apps/web/.env
-```
-*(Windows'ta "cp çalışmıyor" hatası alırsanız, klasörün içine girip `.env.example` adlı dosyanın bir kopyasını oluşturup adını `.env` yapabilirsiniz.)*
-
-### Adım 4: Veritabanını Kurun
-Veritabanımızdaki tabloların otomatik oluşması için terminale şu sırayla yazın (Önce PostgreSQL'in bilgisayarınızda çalışıyor olduğundan emin olun!):
-```bash
-cd packages/database
-bun run prisma migrate dev
-bun run prisma generate
-cd ../..
+Frontend (React)
+        │
+ REST API (Axios)
+        │
+Backend (Node.js + Express)
+        │
+PostgreSQL + Prisma ORM
 ```
 
 ---
 
-## 🎬 3. Projeyi Çalıştırma
+# 🚀 Kullanılan Teknolojiler
 
-Kurulum tamamen bitti! Artık projeyi başlatabiliriz. Ana proje klasöründe terminale şunu yazın:
+## Frontend
 
-```bash
-bun run dev
-```
+- React
+- JavaScript (ES6+)
+- React Router
+- Context API
+- Axios
+- CSS / SCSS
 
-Ekranda birkaç yazı belirecek ve yeşil yazılar göreceksiniz.
-- **Siteye Girmek İçin:** Tarayıcınızda `http://localhost:5173` adresine gidin.
-- (Eğer her şey tamamsa karşınıza giriş ekranı çıkacaktır.)
+## Backend
+
+- Node.js
+- Express.js
+- PostgreSQL
+- Prisma ORM
+- JWT Authentication
+- REST API
+- CORS
+- Dotenv
 
 ---
 
-## 🚨 4. Hata Çözüm Rehberi (Kurtarıcı Adımlar)
+# 📂 Frontend Klasör Yapısı
 
-Eğer projenizi çalıştırırken veya kurarken bir şeyler ters giderse **paniğe kapılmayın**. En çok karşılaşılan sorunları nasıl çözeceğiniz aşağıda:
-
-### 💡 "bun install" yaparken hata aldım / Paketler hatalı yüklendi!
-Paketler yüklenirken bir şebeke problemi veya uyumsuzluk olmuş olabilir. En etkili çözüm "**Kapatıp Tekrar Açmak / Silip Yüklemek**"tir :)
-Projenin ana klasöründeyken terminalde şunları yazarak temizleyip baştan yükleyin:
-
-**Mac/Linux için:**
-```bash
-rm -rf node_modules
-rm bun.lockb
-bun install
+```
+src/
+│
+├── components/
+├── pages/
+│   ├── Home
+│   ├── Events
+│   ├── Login
+│   └── Profile
+├── services/
+├── context/
+├── router/
+└── assets/
 ```
 
-**Windows (PowerShell) için:**
-```bash
-Remove-Item -Recurse -Force node_modules
-Remove-Item -Force bun.lockb
-bun install
+### Açıklamalar
+
+- **components** → Tekrar kullanılabilir bileşenler
+- **pages** → Sayfa bileşenleri
+- **services** → API servisleri
+- **context** → Global durum yönetimi
+- **router** → Sayfa yönlendirmeleri
+- **assets** → Statik dosyalar
+
+---
+
+# 📂 Backend Klasör Yapısı
+
 ```
-*(Bu komutlar eski bozuk kurulumu silerek `bun install` ile en temiz haliyle tekrar yükler.)*
+src/
+│
+├── controllers/
+├── routes/
+├── middlewares/
+├── services/
+├── prisma/
+├── config/
+└── server.js
+```
 
-### 💡 "Database Connection" (Veritabanı Bağlantı) Hatası
-- PostgreSQL veritabanını kurduğunuzdan ve arka planda açık olduğundan emin olun.
-- Şifrenizi kurulumda `postgres` yapmadıysanız, `config/apps/api/.env` dosyasına girip oradaki `postgresql://postgres:postgres@localhost...` yazan kısımdaki ikinci `postgres`'i koyduğunuz kendi şifrenizle değiştirin.
+### Açıklamalar
 
-### 💡 "Port 5173 / 3000 is already in use" (Port dolu) Hatası
-Arka planda projeyi zaten çalıştırmışsınız veya başka bir program bu kanalları kullanıyor olabilir. Terminal'i tamamen kapatıp yeni bir terminal açarak tekrar deneyin.
+- **controllers** → Request / Response yönetimi
+- **routes** → API endpoint tanımları
+- **middlewares** → JWT doğrulama ve diğer middleware işlemleri
+- **services** → İş kuralları (Business Logic)
+- **prisma** → Veritabanı modeli ve migration dosyaları
+- **config** → Uygulama ayarları
+
+---
+
+# 🌐 Sayfalar
+
+- Ana Sayfa
+- Giriş Yap
+- Etkinlikler
+- Profil
+
+---
+
+# 🔗 API Endpointleri
+
+## Authentication
+
+```
+POST /auth/register
+POST /auth/login
+GET  /auth/me
+```
+
+## Users
+
+```
+GET  /users/:id
+PUT  /users/:id
+```
+
+## Events
+
+```
+GET    /events
+GET    /events/:id
+POST   /events
+PUT    /events/:id
+DELETE /events/:id
+```
+
+---
+
+# 🔍 Filtreleme
+
+```
+GET /events?city=istanbul
+
+GET /events?type=concert
+
+GET /events?date=2026-03-25
+
+GET /events?city=ankara&type=theater
+```
+
+---
+
+# 🗄️ Veritabanı Modelleri
+
+## User
+
+- id
+- name
+- email
+- password
+- city
+
+## Event
+
+- id
+- title
+- description
+- city
+- date
+- type
+- image
+
+## Favorite
+
+- id
+- userId
+- eventId
+
+---
+
+# 🔐 Kimlik Doğrulama
+
+Sistemde JWT tabanlı kimlik doğrulama kullanılmaktadır.
+
+- Kullanıcı kayıt olabilir.
+- Giriş yaptıktan sonra JWT Token oluşturulur.
+- Korumalı endpointlerde Authorization Header üzerinden doğrulama yapılır.
+- Middleware yapısı ile yetkisiz erişimler engellenir.
+
+---
+
+# 🔄 Frontend - Backend Entegrasyonu
+
+Frontend uygulaması REST API üzerinden backend ile haberleşmektedir.
+
+Örnek API istekleri:
+
+```
+GET http://localhost:5000/events
+
+POST http://localhost:5000/auth/login
+```
+
+---
+
+# ⚙️ Kurulum
+
+## Backend
+
+```bash
+cd backend
+
+npm install
+
+npm run dev
+```
+
+## Frontend
+
+```bash
+cd frontend
+
+npm install
+
+npm run dev
+```
+
+---
+
+# 🎯 Projenin Amacı
+
+Bu proje ile;
+
+- React kullanarak modern kullanıcı arayüzleri geliştirmek
+- Node.js ve Express.js ile REST API geliştirmek
+- PostgreSQL ve Prisma ORM ile ilişkisel veritabanı kullanmak
+- JWT Authentication yapısını uygulamak
+- Frontend ve backend entegrasyonu gerçekleştirmek
+- Gerçek ekip çalışması deneyimi kazanmak
+
+amaçlanmıştır.
+
+---
+
+# 👨‍💻 Geliştirici
+
+**Ahmet Erbey**
+
+Full Stack Developer
